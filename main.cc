@@ -1,10 +1,10 @@
 #include <iostream>
 #include <map>
-#include "tree.hh"
+#include "map.hh"
 using namespace std;
 int main(){
 
-    Tree<string, int> counter ("Adam", 10);
+    Map<string, int> counter ("Adam", 10);
     counter["Isabel"] = 5;
     counter.insert("Jack", 10);
     counter["Jack"] = 20;

@@ -1,10 +1,10 @@
 CC=g++
 CFLAGS=-Wall -Wextra
-HFILES=tree.hh node.hh
-all: tree
+HFILES=map.hh node.hh
+all: map
 
-tree: $(HFILES) main.cc
-	$(CC) $(CFLAGS) -o tree main.cc
+map: $(HFILES) main.cc
+	$(CC) $(CFLAGS) -o map main.cc
 
 clean: 
-	rm tree 
+	rm map

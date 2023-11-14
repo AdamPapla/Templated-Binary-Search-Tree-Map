@@ -1,15 +1,15 @@
-#ifndef TREE_HH_
-#define TREE_HH_
+#ifndef Map_HH_
+#define Map_HH_
 #include <iostream>
 #include <memory>
 #include "node.hh"
 
 template<typename T, typename U>
-class Tree{
+class Map{
 public:
-    Tree() : root {nullptr} {}
-    Tree(const std::pair<T,U>& initialPair) : root {std::make_unique<Node<T,U>> (initialPair)} {}
-    Tree(const T& k, const U& v) : root {std::make_unique<Node<T,U>> (k, v)} {}
+    Map() : root {nullptr} {}
+    Map(const std::pair<T,U>& initialPair) : root {std::make_unique<Node<T,U>> (initialPair)} {}
+    Map(const T& k, const U& v) : root {std::make_unique<Node<T,U>> (k, v)} {}
 
     void insert(std::pair<T, U> entry){
         std::unique_ptr<Node<T,U>> newNode = std::make_unique<Node<T,U>> (entry);
@@ -42,8 +42,11 @@ public:
 
 
 
-    U& search(T key){
-        return searchRecursion(key, root) -> value;
+    bool search(T key){
+        std::unique_ptr<Node<T,U>>& foundNode = searchRecursion(key, root);
+        if (foundNode -> key == root -> key && root -> key != key)
+            return false;
+        return true;
     }
 
     U& operator[](const T key);
@@ -58,7 +61,7 @@ public:
 };
 
 template <typename T, typename U>
-U& Tree<T,U>::operator[](const T key){
+U& Map<T,U>::operator[](const T key){
     const std::unique_ptr<Node<T,U>>& foundNode = searchRecursion(key, root);
     if (foundNode -> key == root -> key && root -> key != key){
         insert(key, U());
@@ -69,7 +72,7 @@ U& Tree<T,U>::operator[](const T key){
 
 
 template <typename T, typename U>
-void Tree<T,U>::insertRecursion(std::unique_ptr<Node<T,U>> newNode, std::unique_ptr<Node<T,U>>& root){
+void Map<T,U>::insertRecursion(std::unique_ptr<Node<T,U>> newNode, std::unique_ptr<Node<T,U>>& root){
     if (newNode == nullptr)
         return;
     else if (root == nullptr){
@@ -97,7 +100,7 @@ void Tree<T,U>::insertRecursion(std::unique_ptr<Node<T,U>> newNode, std::unique_
 }
 
 template <typename T, typename U>
-void Tree<T,U>::displayRecursion(const std::unique_ptr<Node<T,U>>& root){
+void Map<T,U>::displayRecursion(const std::unique_ptr<Node<T,U>>& root){
     if (root != nullptr){
         displayRecursion(root -> left);
         std::cout << *root << std::endl;
@@ -106,7 +109,7 @@ void Tree<T,U>::displayRecursion(const std::unique_ptr<Node<T,U>>& root){
 }
 
 template <typename T, typename U>
-const std::unique_ptr<Node<T,U>>& Tree<T,U>::searchRecursion(const T& searchKey, const std::unique_ptr<Node<T,U>>& subRoot) const{
+const std::unique_ptr<Node<T,U>>& Map<T,U>::searchRecursion(const T& searchKey, const std::unique_ptr<Node<T,U>>& subRoot) const{
     if (subRoot == nullptr)
         return root;
     else if (subRoot -> key == searchKey)
@@ -120,7 +123,7 @@ const std::unique_ptr<Node<T,U>>& Tree<T,U>::searchRecursion(const T& searchKey,
 }
 
 template <typename T, typename U>
-std::unique_ptr<Node<T,U>>& Tree<T,U>::searchRecursion(const T& searchKey, std::unique_ptr<Node<T,U>>& subRoot){
+std::unique_ptr<Node<T,U>>& Map<T,U>::searchRecursion(const T& searchKey, std::unique_ptr<Node<T,U>>& subRoot){
     if (subRoot == nullptr)
         return root;
     else if (subRoot -> key == searchKey)
