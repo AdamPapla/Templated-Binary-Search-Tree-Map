@@ -1,10 +1,10 @@
 CC=g++
 CFLAGS=-Wall -Wextra
-SFILES=tree.cc
+HFILES=tree.hh node.hh
 all: tree
 
-tree: tree.hh tree.o main.cc
-	$(CC) $(CFLAGS) -o tree $(SFILES) main.cc
+tree: $(HFILES) main.cc
+	$(CC) $(CFLAGS) -o tree main.cc
 
 clean: 
-	rm tree.o tree 
+	rm tree 
