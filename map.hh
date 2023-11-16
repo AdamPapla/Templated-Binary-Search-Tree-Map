@@ -10,7 +10,13 @@ public:
     Map() : root {nullptr} {}
     Map(const std::pair<T,U>& initialPair) : root {std::make_unique<Node<T,U>> (initialPair)} {}
     Map(const T& k, const U& v) : root {std::make_unique<Node<T,U>> (k, v)} {}
-
+    Map(const Map& in){
+        root = std::make_unique<Node<T,U>> (*(in.root));
+    }
+    Map operator=(const Map& original){
+        *root = *(original.root);
+        return *this;
+    }
     void insert(std::pair<T, U> entry){
         std::unique_ptr<Node<T,U>> newNode = std::make_unique<Node<T,U>> (entry);
         insertRecursion(std::move(newNode), root);
@@ -28,7 +34,7 @@ public:
         return foundNode -> value;
     }
     const U& at(const T& key) const{
-        std::unique_ptr<Node<T,U>>& foundNode = searchRecursion(key, root);
+        const std::unique_ptr<Node<T,U>>& foundNode = searchRecursion(key, root);
         if (foundNode -> key == root -> key && root -> key != key){
             throw std::out_of_range("No key corresponding to given index");
         }
@@ -54,7 +60,7 @@ public:
     private:
 
     void insertRecursion(std::unique_ptr<Node<T,U>> newNode, std::unique_ptr<Node<T,U>>& subRoot);
-    void displayRecursion(const std::unique_ptr<Node<T,U>>& root);
+    void displayRecursion(const std::unique_ptr<Node<T,U>>& root) const;
     std::unique_ptr<Node<T,U>>& searchRecursion(const T& searchKey, std::unique_ptr<Node<T,U>>& subRoot);
     const std::unique_ptr<Node<T,U>>& searchRecursion(const T& searchKey, const std::unique_ptr<Node<T,U>>& root) const;
     std::unique_ptr<Node<T,U>> root;
@@ -100,7 +106,7 @@ void Map<T,U>::insertRecursion(std::unique_ptr<Node<T,U>> newNode, std::unique_p
 }
 
 template <typename T, typename U>
-void Map<T,U>::displayRecursion(const std::unique_ptr<Node<T,U>>& root){
+void Map<T,U>::displayRecursion(const std::unique_ptr<Node<T,U>>& root) const{
     if (root != nullptr){
         displayRecursion(root -> left);
         std::cout << *root << std::endl;
